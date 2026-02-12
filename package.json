@@ -3,7 +3,7 @@
   "displayName": "SmartDevIDE",
   "description": "Enhanced AI coding assistant with role-based behavior, multi-model support, and intelligent prompt enhancement",
   "version": "2.0.0",
-  "publisher": "aimavricks",
+  "publisher": "poonam-em111",
   "engines": {
     "vscode": "^1.75.0"
   },
@@ -248,7 +248,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/aimavricks/smartdevide"
+    "url": "https://github.com/poonam-em111/smartdevide"
   },
   "license": "MIT"
 }

@@ -461,10 +461,10 @@ Use extension in automated workflows:
 
 ## 💬 Get Help
 
-- **Documentation**: [GitHub Wiki](https://github.com/aimavricks/smartdevide/wiki)
-- **Issues**: [GitHub Issues](https://github.com/aimavricks/smartdevide/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/aimavricks/smartdevide/discussions)
-- **Email**: support@aimavricks.com
+- **Documentation**: [GitHub Wiki](https://github.com/poonam-em111/smartdevide/wiki)
+- **Issues**: [GitHub Issues](https://github.com/poonam-em111/smartdevide/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/poonam-em111/smartdevide/discussions)
+- **Email**: support@poonam-em111.com
 
 ## 🎉 You're Ready!
 

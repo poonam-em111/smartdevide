@@ -36,6 +36,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ModelManager = void 0;
 const vscode = __importStar(require("vscode"));
 const defaults_1 = require("../config/defaults");
+const defaults_2 = require("../config/defaults");
 class ModelManager {
     constructor(context) {
         this.context = context;
@@ -245,9 +246,9 @@ class ModelManager {
                 openai: {
                     id: 'openai',
                     name: 'OpenAI',
-                    apiKey: config.get('models.openai.apiKey'),
+                    apiKey: config.get('models.openai.apiKey')?.trim() || (defaults_2.DEFAULT_OPENAI_API_KEY && defaults_2.DEFAULT_OPENAI_API_KEY.trim()) || undefined,
                     organization: config.get('models.openai.organization'),
-                    enabled: config.get('models.openai.enabled', false),
+                    enabled: config.get('models.openai.enabled', false) || !!(defaults_2.DEFAULT_OPENAI_API_KEY && defaults_2.DEFAULT_OPENAI_API_KEY.trim()),
                     defaultModel: config.get('models.openai.defaultModel', 'gpt-4-turbo')
                 },
                 anthropic: {

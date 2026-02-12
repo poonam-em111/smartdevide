@@ -1,0 +1,20 @@
+# Template shown when creating a new discussion in the General category
+# at https://github.com/poonam-em111/smartdevide/discussions
+# Category slug must match: create a "General" category when enabling Discussions
+title: "[General] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this space for general questions, feedback, or chat about SmartDevIDE.
+        For **bugs** or **feature requests**, please open an [Issue](https://github.com/poonam-em111/smartdevide/issues).
+  - type: textarea
+    id: body
+    attributes:
+      label: What would you like to share?
+      description: Your message or question
+      placeholder: e.g. How do I install in Cursor? / I'd like to suggest...
+      value: ""
+    validations:
+      required: true

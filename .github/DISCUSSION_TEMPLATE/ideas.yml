@@ -1,0 +1,24 @@
+# Template for Ideas category at https://github.com/poonam-em111/smartdevide/discussions
+# Enable Discussions in repo Settings and create an "Ideas" category (slug: ideas) to use this
+title: "[Ideas] "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Share an idea for SmartDevIDE (features, workflows, integrations).
+  - type: input
+    id: idea-title
+    attributes:
+      label: Idea in one line
+      placeholder: e.g. Add Ollama as a model provider
+    validations:
+      required: true
+  - type: textarea
+    id: idea-details
+    attributes:
+      label: Details
+      description: Why is it useful? How could it work?
+      placeholder: Describe your idea...
+    validations:
+      required: true

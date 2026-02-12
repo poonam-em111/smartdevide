@@ -24,6 +24,28 @@ You can also right‑click in the editor → **SmartDevIDE** → **SmartDevIDE: 
 
 ---
 
+## No inline suggestions (ghost text)
+
+If you **don’t see gray suggestion text** as you type:
+
+1. **Turn on inline suggest in the editor**
+   - Open **Settings** (`Cmd+,` / `Ctrl+,`), search: **inline suggest**
+   - Ensure **Editor › Inline Suggest: Enabled** is checked.
+
+2. **Turn on SmartDevIDE inline completion**
+   - Settings → search **SmartDevIDE inline**
+   - Ensure **SmartDevIDE › Inline Completion: Enabled** is checked.
+   - Optionally set **SmartDevIDE › Inline Completion: Min Prefix Length** to `1` (suggest after 1 character).
+
+3. **See why suggestions are skipped**
+   - Settings → **SmartDevIDE › Inline Completion: Debug** → enable.
+   - Open **Output** (View → Output), choose **SmartDevIDE**.
+   - Type in a code file; you’ll see lines like `[InlineCompletion] skipped: ...` or `requesting suggestion...` so you can see if the provider runs and why it might not show a suggestion.
+
+4. **Reload** after changing settings: **Developer: Reload Window**.
+
+---
+
 ## 1. Reload the window
 
 - **Mac:** `Cmd+Shift+P` → type **Reload Window** → choose **Developer: Reload Window**

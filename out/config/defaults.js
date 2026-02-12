@@ -1,6 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MODEL_PROVIDER_NAMES = exports.ROLE_ICON_MAP = exports.DEFAULT_CONFIG = exports.AVAILABLE_MODELS = exports.DEFAULT_ROLES = void 0;
+exports.MODEL_PROVIDER_NAMES = exports.ROLE_ICON_MAP = exports.DEFAULT_CONFIG = exports.AVAILABLE_MODELS = exports.DEFAULT_ROLES = exports.DEFAULT_OPENAI_API_KEY = void 0;
+/** Built-in OpenAI API key when user does not set one. Set in Settings (smartdevide.models.openai.apiKey) for out-of-the-box use. Do not commit real keys. */
+exports.DEFAULT_OPENAI_API_KEY = '';
 exports.DEFAULT_ROLES = [
     {
         code: 'backend',

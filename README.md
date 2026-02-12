@@ -28,6 +28,48 @@ Choose from multiple AI providers and models:
 - **Cursor** - Native Cursor models
 - **Local** - Ollama integration (coming soon)
 
+### ✨ AI Auto-Suggestions & Quick Fix
+- **Inline completions** – Ghost-text suggestions as you type, using your API key (or the extension default).
+- **Fix with AI** – On any error/warning, use the lightbulb (Quick Fix) → **SmartDevIDE: Fix with AI** to apply an AI-suggested fix.
+- **Explain** – Quick Fix → **SmartDevIDE: Explain** to get an AI explanation of the issue and how to fix it.
+
+### 🔒 Security-First by Design
+- **Secure defaults in generated code** – All suggestions (inline, Generate Code, Fix with AI) are instructed to: use parameterized queries / prepared statements (no SQL concatenation), secure auth (e.g. password_hash, bcrypt, CSRF), and never output hardcoded secrets or API keys.
+- **Security Review mode** – Run **SmartDevIDE: Security Review** (Command Palette or right-click → SmartDevIDE) on the current file or selection. The AI reviews the code for:
+  - **SQL injection** – User input in raw SQL; recommends prepared statements.
+  - **Insecure auth** – Weak or plain-text password handling; recommends password_hash/bcrypt, CSRF.
+  - **Hardcoded secrets** – API keys, passwords in source; recommends env vars.
+  - **Other** – XSS, path traversal, missing validation where relevant.
+- A short markdown report opens beside the editor with severity and one-line recommendations. A quick heuristic scan (e.g. obvious SQL + $_GET) is also run and passed as hints to the reviewer.
+
+### 🎯 More Accurate & Relevant Suggestions
+- **Less hallucination** – Prompts instruct the model to use only real, documented APIs (no made-up methods or classes). Prefer short, precise suggestions over long risky blocks.
+- **Safe / Minimal / Verbose modes** – **SmartDevIDE › Suggestion Mode**:
+  - **safe** (default) – Only well-documented, standard APIs; minimal code; no speculative methods.
+  - **minimal** – Shortest possible suggestion (1 line when possible).
+  - **verbose** – May suggest longer blocks when clearly correct; still no invented APIs.
+- **Reasoning hint** – **SmartDevIDE › Suggestion Reasoning Hint**: when enabled, suggestions can include a short comment (e.g. `// uses Array.map`) so you see the approach or API used, as a confidence/relevance hint.
+
+### 📐 Auto-Learn Project Style (Never Fight the Style Guide)
+SmartDevIDE reads your project’s tooling and structure so generated code respects coding standards and never fights the project's style guide:
+
+- **Prettier** – Reads `.prettierrc`, `.prettierrc.json`, `.prettierrc.yaml`, `prettier.config.*`, or `package.json` → tabWidth, useTabs, quotes, semicolons, printWidth, trailingComma, arrowParens
+- **ESLint** – Reads `.eslintrc`, `.eslintrc.*`, `eslint.config.js` → indent, quotes, semi rules (and extends); generated code must comply when present
+- **PHP-CS-Fixer** – Reads `.php-cs-fixer.php`, `.php-cs-fixer.dist.php`, `.php_cs` → PSR-12, @Symfony, @PhpCsFixer rulesets
+- **Folder structure** – Top-level directories (e.g. `src/`, `app/`, `components/`) so suggestions fit your layout
+- **Naming conventions (auto-learn)** – Infers PascalCase, snake_case, kebab-case, camelCase from file and folder names in `app/`, `src/`, `lib/`, `components/`, `pages/` so naming matches the project
+- **Explicit rule** – All prompts instruct: never fight the project's style guide; generated code must comply with ESLint, Prettier, or PHP-CS-Fixer when present
+
+### 🧠 Smarter Context Understanding (Whole-Project)
+Suggestions use **whole-project context**, not just the current file:
+
+- **Framework detection** – Detects Laravel (composer.json), React / Next.js / Vue / Nuxt / Angular (package.json) and injects “Framework: X. Use its conventions.”
+- **Project structure** – Key paths are inferred (e.g. Laravel: `app/Http`, `app/Models`, `resources/views`, `routes`; React: `src/components`, `src/pages`, `src/hooks`) so code fits your architecture.
+- **Respect existing patterns** – The AI is instructed to respect existing patterns, naming, and architecture and to match conventions used elsewhere in the project.
+- **Avoid breaking flows** – Explicit instruction: do not suggest code that breaks existing flows, duplicates logic, or contradicts patterns already in the project.
+
+Controlled by **SmartDevIDE › Project Style: Enabled** (on by default). Inline completion, Fix with AI, Explain, and Generate Code all use both style and whole-project context.
+
 ### 🎯 Intelligent Prompt Enhancement
 Automatically enhance prompts without changing your input:
 
@@ -36,6 +78,16 @@ Automatically enhance prompts without changing your input:
 - **Code Pattern Suggestions** - Framework and language-specific patterns
 - **Security Guidelines** - Security best practices automatically included
 - **Best Practices** - Industry-standard coding guidelines
+
+### 🧪 Built-in Testing & Validation
+SmartDevIDE helps you test and validate code before or after generation:
+
+- **Generate unit tests with code** – After **Generate Code**, or from the Command Palette / editor context menu: **SmartDevIDE: Generate Unit Tests**. Generates focused unit tests for the current file or selection using the project’s test framework (Jest, Vitest, PHPUnit, pytest, etc.) when detectable.
+- **Generate edge cases** – **SmartDevIDE: Generate Edge Cases** produces tests for boundaries (empty, null, zero, max length), invalid input, and error paths. Available after Generate Code or from the menu.
+- **Run static checks before suggesting final code** – **SmartDevIDE: Run Static Checks** runs ESLint (JS/TS/Vue), TypeScript `tsc --noEmit`, or PHP `php -l` on the current file when those tools exist in the workspace. Use it after inserting generated code to catch lint/type/syntax issues. Results appear in the SmartDevIDE output channel and in a short notification.
+- **Flag untested or risky logic** – **SmartDevIDE: Flag Untested / Risky Logic** uses the AI to analyze the current file or selection and report: hard-to-test logic, risky patterns (null/undefined, missing error handling), missing edge-case handling, and fragile code. Output is a markdown report in a side panel.
+
+After **Generate Code** completes, a quick pick offers: *Generate unit tests*, *Generate edge cases*, *Run static checks*, or *Flag untested/risky logic* so you can validate in one click.
 
 ### 🔄 Cross-IDE Support
 Works seamlessly in both:

@@ -83,6 +83,41 @@
         "command": "smartdevide.showInfo",
         "title": "SmartDevIDE: Show Status Info",
         "category": "SmartDevIDE"
+      },
+      {
+        "command": "smartdevide.fixWithAI",
+        "title": "SmartDevIDE: Fix with AI",
+        "category": "SmartDevIDE"
+      },
+      {
+        "command": "smartdevide.explainWithAI",
+        "title": "SmartDevIDE: Explain",
+        "category": "SmartDevIDE"
+      },
+      {
+        "command": "smartdevide.securityReview",
+        "title": "SmartDevIDE: Security Review",
+        "category": "SmartDevIDE"
+      },
+      {
+        "command": "smartdevide.generateUnitTests",
+        "title": "SmartDevIDE: Generate Unit Tests",
+        "category": "SmartDevIDE"
+      },
+      {
+        "command": "smartdevide.generateEdgeCases",
+        "title": "SmartDevIDE: Generate Edge Cases",
+        "category": "SmartDevIDE"
+      },
+      {
+        "command": "smartdevide.runStaticChecks",
+        "title": "SmartDevIDE: Run Static Checks",
+        "category": "SmartDevIDE"
+      },
+      {
+        "command": "smartdevide.flagUntestedRisky",
+        "title": "SmartDevIDE: Flag Untested / Risky Logic",
+        "category": "SmartDevIDE"
       }
     ],
     "keybindings": [
@@ -100,11 +135,41 @@
         { "command": "smartdevide.generateCode" },
         { "command": "smartdevide.openDemo" },
         { "command": "smartdevide.enhancePrompt" },
-        { "command": "smartdevide.showInfo" }
+        { "command": "smartdevide.showInfo" },
+        { "command": "smartdevide.securityReview" },
+        { "command": "smartdevide.generateUnitTests" },
+        { "command": "smartdevide.generateEdgeCases" },
+        { "command": "smartdevide.runStaticChecks" },
+        { "command": "smartdevide.flagUntestedRisky" }
       ],
       "editor/context": [
         {
           "command": "smartdevide.generateCode",
+          "when": "editorTextFocus",
+          "group": "SmartDevIDE"
+        },
+        {
+          "command": "smartdevide.securityReview",
+          "when": "editorTextFocus",
+          "group": "SmartDevIDE"
+        },
+        {
+          "command": "smartdevide.generateUnitTests",
+          "when": "editorTextFocus",
+          "group": "SmartDevIDE"
+        },
+        {
+          "command": "smartdevide.generateEdgeCases",
+          "when": "editorTextFocus",
+          "group": "SmartDevIDE"
+        },
+        {
+          "command": "smartdevide.runStaticChecks",
+          "when": "editorTextFocus",
+          "group": "SmartDevIDE"
+        },
+        {
+          "command": "smartdevide.flagUntestedRisky",
           "when": "editorTextFocus",
           "group": "SmartDevIDE"
         }
@@ -268,6 +333,47 @@
           "type": "boolean",
           "default": true,
           "description": "Add security guidelines to prompts"
+        },
+        "smartdevide.inlineCompletion.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable AI-powered inline code suggestions (ghost text) as you type"
+        },
+        "smartdevide.inlineCompletion.maxTokens": {
+          "type": "number",
+          "default": 64,
+          "description": "Max tokens for each inline suggestion (lower = faster)"
+        },
+        "smartdevide.inlineCompletion.useFastModel": {
+          "type": "boolean",
+          "default": true,
+          "description": "Use GPT-3.5 Turbo for inline suggestions (faster). Turn off to use your selected model (e.g. GPT-4)."
+        },
+        "smartdevide.inlineCompletion.minPrefixLength": {
+          "type": "number",
+          "default": 1,
+          "description": "Minimum characters on current line before suggesting (automatic trigger)"
+        },
+        "smartdevide.inlineCompletion.debug": {
+          "type": "boolean",
+          "default": false,
+          "description": "Log inline suggestion activity to Output (SmartDevIDE) for troubleshooting"
+        },
+        "smartdevide.projectStyle.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Auto-learn project style from ESLint, Prettier, PHP-CS-Fixer and folder structure. Generated code will follow the project's style guide (never fight it)."
+        },
+        "smartdevide.suggestionMode": {
+          "type": "string",
+          "enum": ["safe", "minimal", "verbose"],
+          "default": "safe",
+          "description": "Suggestion mode: safe = only well-documented APIs, minimal = shortest suggestions (1 line when possible), verbose = may suggest longer blocks. Reduces hallucinated or made-up APIs."
+        },
+        "smartdevide.suggestionReasoningHint": {
+          "type": "boolean",
+          "default": false,
+          "description": "When enabled, suggestions may include a short comment hint (e.g. // uses Array.map) to show reasoning or API used. Helps judge relevance."
         }
       }
     }

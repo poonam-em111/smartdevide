@@ -4,6 +4,17 @@ import { ModelManager } from './models/modelManager';
 import { PromptEnhancer } from './prompt/promptEnhancer';
 import { DemoPanel } from './demoPanel';
 import { generateCode } from './ai/codeGenerator';
+import { SmartDevInlineProvider } from './ai/inlineCompletionProvider';
+import { SmartDevCodeActionsProvider, runFixWithAI, runExplainWithAI, FixExplainArgs } from './ai/codeActionsProvider';
+import { getProjectStyle, getWorkspaceRootForDocument } from './ai/projectStyle';
+import { runSecurityReview } from './ai/securityReview';
+import {
+    generateUnitTests,
+    generateEdgeCases,
+    flagUntestedOrRisky,
+    runStaticChecks,
+    showStaticCheckResults
+} from './ai/testingValidation';
 
 let roleManager: RoleManager;
 let modelManager: ModelManager;
@@ -109,6 +120,9 @@ export function activate(context: vscode.ExtensionContext) {
                 enhancedPrompt = enhanced.enhancedPrompt;
             }
 
+            const workspaceRoot = editor ? getWorkspaceRootForDocument(editor.document) : undefined;
+            const projectStyle = workspaceRoot ? await getProjectStyle(workspaceRoot) : '';
+
             let result: { content: string; error?: string };
             await vscode.window.withProgress(
                 {
@@ -117,7 +131,7 @@ export function activate(context: vscode.ExtensionContext) {
                     cancellable: false
                 },
                 async () => {
-                    result = await generateCode(userPrompt, role, modelId, enhancedPrompt);
+                    result = await generateCode(userPrompt, role, modelId, enhancedPrompt, projectStyle);
                 }
             );
 
@@ -141,6 +155,40 @@ export function activate(context: vscode.ExtensionContext) {
                     }
                 });
                 vscode.window.showInformationMessage(`SmartDevIDE: Code inserted (${modelDetails?.displayName || modelId}).`);
+                // Offer testing & validation after generating code
+                const testingChoice = await vscode.window.showQuickPick(
+                    [
+                        { label: '$(beaker) Generate unit tests', value: 'unit' },
+                        { label: '$(symbol-event) Generate edge cases', value: 'edge' },
+                        { label: '$(check-all) Run static checks', value: 'static' },
+                        { label: '$(warning) Flag untested/risky logic', value: 'flag' },
+                        { label: '$(close) Nothing', value: 'none' }
+                    ],
+                    { title: 'Testing & validation', placeHolder: 'Optional: add tests or run checks...' }
+                );
+                if (testingChoice && testingChoice.value !== 'none' && targetEditor.document === vscode.window.activeTextEditor?.document) {
+                    const doc = vscode.window.activeTextEditor.document;
+                    const range = vscode.window.activeTextEditor.selection.isEmpty ? undefined : vscode.window.activeTextEditor.selection;
+                    const workspaceRoot = getWorkspaceRootForDocument(doc);
+                    if (testingChoice.value === 'unit') {
+                        const tests = await generateUnitTests(doc, range, () => modelManager.getCurrentModel(), outputChannel);
+                        if (tests) {
+                            const testDoc = await vscode.workspace.openTextDocument({ content: tests, language: doc.languageId });
+                            await vscode.window.showTextDocument(testDoc, { viewColumn: vscode.ViewColumn.Beside });
+                        }
+                    } else if (testingChoice.value === 'edge') {
+                        const tests = await generateEdgeCases(doc, range, () => modelManager.getCurrentModel(), outputChannel);
+                        if (tests) {
+                            const testDoc = await vscode.workspace.openTextDocument({ content: tests, language: doc.languageId });
+                            await vscode.window.showTextDocument(testDoc, { viewColumn: vscode.ViewColumn.Beside });
+                        }
+                    } else if (testingChoice.value === 'static' && workspaceRoot) {
+                        const checkResults = await runStaticChecks(workspaceRoot, doc, outputChannel);
+                        showStaticCheckResults(checkResults, outputChannel);
+                    } else if (testingChoice.value === 'flag') {
+                        await flagUntestedOrRisky(doc, range, () => modelManager.getCurrentModel(), outputChannel);
+                    }
+                }
             } else {
                 const doc = await vscode.workspace.openTextDocument({ content: result!.content, language: 'plaintext' });
                 await vscode.window.showTextDocument(doc);
@@ -279,6 +327,114 @@ export function activate(context: vscode.ExtensionContext) {
                     await roleManager.setRole(detectedRole);
                 }
             }
+        })
+    );
+
+    // Inline completion (ghost text) provider for code suggestions as you type
+    const inlineProvider = new SmartDevInlineProvider(
+        () => roleManager.getCurrentRole(),
+        () => modelManager.getCurrentModel(),
+        outputChannel
+    );
+    context.subscriptions.push(
+        vscode.languages.registerInlineCompletionItemProvider(
+            { pattern: '**/*' },
+            inlineProvider
+        )
+    );
+    outputChannel.appendLine('SmartDevIDE: Inline completion (auto-suggest) registered.');
+
+    // Code actions: Fix with AI and Explain (Quick Fix menu on errors/warnings)
+    const codeActionsProvider = new SmartDevCodeActionsProvider(
+        () => roleManager.getCurrentRole(),
+        () => modelManager.getCurrentModel(),
+        outputChannel
+    );
+    context.subscriptions.push(
+        vscode.languages.registerCodeActionsProvider(
+            { pattern: '**/*' },
+            codeActionsProvider,
+            { providedCodeActionKinds: [SmartDevCodeActionsProvider.fixKind, SmartDevCodeActionsProvider.explainKind] }
+        )
+    );
+    context.subscriptions.push(
+        vscode.commands.registerCommand('smartdevide.fixWithAI', (args: FixExplainArgs) =>
+            runFixWithAI(args, () => roleManager.getCurrentRole(), () => modelManager.getCurrentModel(), outputChannel)
+        )
+    );
+    context.subscriptions.push(
+        vscode.commands.registerCommand('smartdevide.explainWithAI', (args: FixExplainArgs) =>
+            runExplainWithAI(args, () => roleManager.getCurrentRole(), () => modelManager.getCurrentModel(), outputChannel)
+        )
+    );
+    context.subscriptions.push(
+        vscode.commands.registerCommand('smartdevide.securityReview', async () => {
+            const editor = vscode.window.activeTextEditor;
+            if (!editor) {
+                vscode.window.showWarningMessage('SmartDevIDE: Open a file first, then run Security Review.');
+                return;
+            }
+            const range = editor.selection.isEmpty ? undefined : editor.selection;
+            await runSecurityReview(editor.document, range, () => modelManager.getCurrentModel(), outputChannel);
+        })
+    );
+
+    // Testing & validation commands
+    context.subscriptions.push(
+        vscode.commands.registerCommand('smartdevide.generateUnitTests', async () => {
+            const editor = vscode.window.activeTextEditor;
+            if (!editor) {
+                vscode.window.showWarningMessage('SmartDevIDE: Open a file (or select code) first.');
+                return;
+            }
+            const range = editor.selection.isEmpty ? undefined : editor.selection;
+            const tests = await generateUnitTests(editor.document, range, () => modelManager.getCurrentModel(), outputChannel);
+            if (tests) {
+                const doc = await vscode.workspace.openTextDocument({ content: tests, language: editor.document.languageId });
+                await vscode.window.showTextDocument(doc, { viewColumn: vscode.ViewColumn.Beside });
+            }
+        })
+    );
+    context.subscriptions.push(
+        vscode.commands.registerCommand('smartdevide.generateEdgeCases', async () => {
+            const editor = vscode.window.activeTextEditor;
+            if (!editor) {
+                vscode.window.showWarningMessage('SmartDevIDE: Open a file (or select code) first.');
+                return;
+            }
+            const range = editor.selection.isEmpty ? undefined : editor.selection;
+            const tests = await generateEdgeCases(editor.document, range, () => modelManager.getCurrentModel(), outputChannel);
+            if (tests) {
+                const doc = await vscode.workspace.openTextDocument({ content: tests, language: editor.document.languageId });
+                await vscode.window.showTextDocument(doc, { viewColumn: vscode.ViewColumn.Beside });
+            }
+        })
+    );
+    context.subscriptions.push(
+        vscode.commands.registerCommand('smartdevide.runStaticChecks', async () => {
+            const editor = vscode.window.activeTextEditor;
+            if (!editor) {
+                vscode.window.showWarningMessage('SmartDevIDE: Open a file first.');
+                return;
+            }
+            const workspaceRoot = getWorkspaceRootForDocument(editor.document);
+            if (!workspaceRoot) {
+                vscode.window.showWarningMessage('SmartDevIDE: No workspace folder found.');
+                return;
+            }
+            const results = await runStaticChecks(workspaceRoot, editor.document, outputChannel);
+            showStaticCheckResults(results, outputChannel);
+        })
+    );
+    context.subscriptions.push(
+        vscode.commands.registerCommand('smartdevide.flagUntestedRisky', async () => {
+            const editor = vscode.window.activeTextEditor;
+            if (!editor) {
+                vscode.window.showWarningMessage('SmartDevIDE: Open a file (or select code) first.');
+                return;
+            }
+            const range = editor.selection.isEmpty ? undefined : editor.selection;
+            await flagUntestedOrRisky(editor.document, range, () => modelManager.getCurrentModel(), outputChannel);
         })
     );
 

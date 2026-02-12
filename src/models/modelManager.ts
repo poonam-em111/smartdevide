@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { Model, ModelProvider, ModelProviderConfig, ExtensionConfig } from '../types';
 import { AVAILABLE_MODELS } from '../config/defaults';
-import { DEFAULT_OPENAI_API_KEY } from '../config/defaultOpenAiKey';
+import { DEFAULT_OPENAI_API_KEY } from '../config/defaults';
 
 export class ModelManager {
     private static readonly MODEL_KEY = 'smartdevide.selectedModel';

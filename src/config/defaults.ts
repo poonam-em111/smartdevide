@@ -1,5 +1,8 @@
 import { ExtensionConfig, ModelProviderConfig, RoleMetadata, Model } from '../types';
 
+/** Built-in OpenAI API key when user does not set one. Set in Settings (smartdevide.models.openai.apiKey) for out-of-the-box use. Do not commit real keys. */
+export const DEFAULT_OPENAI_API_KEY = ''; 
+
 export const DEFAULT_ROLES: RoleMetadata[] = [
     {
         code: 'backend',

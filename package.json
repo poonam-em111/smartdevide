@@ -1,0 +1,254 @@
+{
+  "name": "smartdevide",
+  "displayName": "SmartDevIDE",
+  "description": "Enhanced AI coding assistant with role-based behavior, multi-model support, and intelligent prompt enhancement",
+  "version": "2.0.0",
+  "publisher": "aimavricks",
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Machine Learning",
+    "Other"
+  ],
+  "keywords": [
+    "ai",
+    "assistant",
+    "copilot",
+    "laravel",
+    "react",
+    "php",
+    "multi-model",
+    "openai",
+    "claude",
+    "gemini"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "smartdevide.selectRole",
+        "title": "SmartDevIDE: Select Role",
+        "category": "SmartDevIDE"
+      },
+      {
+        "command": "smartdevide.selectModel",
+        "title": "SmartDevIDE: Select Model",
+        "category": "SmartDevIDE"
+      },
+      {
+        "command": "smartdevide.autoDetectRole",
+        "title": "SmartDevIDE: Auto-Detect Role",
+        "category": "SmartDevIDE"
+      },
+      {
+        "command": "smartdevide.openDemo",
+        "title": "SmartDevIDE: Open Demo",
+        "category": "SmartDevIDE"
+      },
+      {
+        "command": "smartdevide.generateSolution",
+        "title": "SmartDevIDE: Generate Solution",
+        "category": "SmartDevIDE"
+      },
+      {
+        "command": "smartdevide.enhancePrompt",
+        "title": "SmartDevIDE: Enhance Prompt",
+        "category": "SmartDevIDE"
+      },
+      {
+        "command": "smartdevide.openSettings",
+        "title": "SmartDevIDE: Open Settings",
+        "category": "SmartDevIDE"
+      },
+      {
+        "command": "smartdevide.showInfo",
+        "title": "SmartDevIDE: Show Status Info",
+        "category": "SmartDevIDE"
+      }
+    ],
+    "configuration": {
+      "title": "SmartDevIDE",
+      "properties": {
+        "smartdevide.defaultRole": {
+          "type": "string",
+          "enum": [
+            "backend",
+            "laravel",
+            "corephp",
+            "react",
+            "frontend",
+            "qa",
+            "techlead",
+            "pm"
+          ],
+          "default": "backend",
+          "description": "Default developer role on startup"
+        },
+        "smartdevide.defaultModel": {
+          "type": "string",
+          "default": "gpt-4-turbo",
+          "description": "Default AI model to use"
+        },
+        "smartdevide.autoPromptEnhancement": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically enhance prompts with context and role-specific instructions"
+        },
+        "smartdevide.contextAwareness": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include file and project context in prompts"
+        },
+        "smartdevide.roleAutoSwitch": {
+          "type": "boolean",
+          "default": false,
+          "description": "Automatically switch role based on current file type"
+        },
+        "smartdevide.showRoleInStatusBar": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show current role in status bar"
+        },
+        "smartdevide.showModelInStatusBar": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show current AI model in status bar"
+        },
+        "smartdevide.telemetryEnabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Send anonymous usage data to improve the extension"
+        },
+        "smartdevide.models.openai.enabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable OpenAI models"
+        },
+        "smartdevide.models.openai.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "OpenAI API key",
+          "markdownDescription": "Your OpenAI API key. Get one from [OpenAI Platform](https://platform.openai.com/api-keys)"
+        },
+        "smartdevide.models.openai.organization": {
+          "type": "string",
+          "default": "",
+          "description": "OpenAI organization ID (optional)"
+        },
+        "smartdevide.models.openai.defaultModel": {
+          "type": "string",
+          "enum": [
+            "gpt-4-turbo",
+            "gpt-4",
+            "gpt-3.5-turbo"
+          ],
+          "default": "gpt-4-turbo",
+          "description": "Default OpenAI model"
+        },
+        "smartdevide.models.anthropic.enabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable Anthropic Claude models"
+        },
+        "smartdevide.models.anthropic.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "Anthropic API key",
+          "markdownDescription": "Your Anthropic API key. Get one from [Anthropic Console](https://console.anthropic.com/)"
+        },
+        "smartdevide.models.anthropic.defaultModel": {
+          "type": "string",
+          "enum": [
+            "claude-3-opus",
+            "claude-3-sonnet",
+            "claude-3-haiku"
+          ],
+          "default": "claude-3-sonnet",
+          "description": "Default Anthropic model"
+        },
+        "smartdevide.models.google.enabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable Google Gemini models"
+        },
+        "smartdevide.models.google.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "Google AI API key",
+          "markdownDescription": "Your Google AI API key. Get one from [Google AI Studio](https://makersuite.google.com/app/apikey)"
+        },
+        "smartdevide.models.google.defaultModel": {
+          "type": "string",
+          "enum": [
+            "gemini-pro"
+          ],
+          "default": "gemini-pro",
+          "description": "Default Google model"
+        },
+        "smartdevide.models.cursor.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable Cursor native models"
+        },
+        "smartdevide.models.cursor.defaultModel": {
+          "type": "string",
+          "default": "cursor-default",
+          "description": "Default Cursor model"
+        },
+        "smartdevide.promptEnhancement.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable automatic prompt enhancement"
+        },
+        "smartdevide.promptEnhancement.contextAwareness": {
+          "type": "boolean",
+          "default": true,
+          "description": "Add file and project context to prompts"
+        },
+        "smartdevide.promptEnhancement.roleBasedEnhancement": {
+          "type": "boolean",
+          "default": true,
+          "description": "Add role-specific instructions to prompts"
+        },
+        "smartdevide.promptEnhancement.codePatternSuggestions": {
+          "type": "boolean",
+          "default": true,
+          "description": "Suggest code patterns based on role"
+        },
+        "smartdevide.promptEnhancement.bestPracticesInjection": {
+          "type": "boolean",
+          "default": true,
+          "description": "Include general best practices in prompts"
+        },
+        "smartdevide.promptEnhancement.securityChecks": {
+          "type": "boolean",
+          "default": true,
+          "description": "Add security guidelines to prompts"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "package": "vsce package",
+    "test": "npm run compile && node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/node": "^18.0.0",
+    "@types/vscode": "^1.75.0",
+    "@vscode/vsce": "^2.22.0",
+    "typescript": "^5.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aimavricks/smartdevide"
+  },
+  "license": "MIT"
+}

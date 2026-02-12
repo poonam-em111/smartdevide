@@ -2,7 +2,7 @@
   "name": "smartdevide",
   "displayName": "SmartDevIDE",
   "description": "Enhanced AI coding assistant with role-based behavior, multi-model support, and intelligent prompt enhancement",
-  "version": "2.0.0",
+  "version": "2.0.2",
   "publisher": "poonam-em111",
   "engines": {
     "vscode": "^1.75.0"
@@ -25,7 +25,16 @@
     "gemini"
   ],
   "activationEvents": [
-    "onStartupFinished"
+    "onStartupFinished",
+    "onCommand:smartdevide.selectRole",
+    "onCommand:smartdevide.selectModel",
+    "onCommand:smartdevide.generateCode",
+    "onCommand:smartdevide.openDemo",
+    "onCommand:smartdevide.generateSolution",
+    "onCommand:smartdevide.enhancePrompt",
+    "onCommand:smartdevide.openSettings",
+    "onCommand:smartdevide.showInfo",
+    "onCommand:smartdevide.autoDetectRole"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -43,6 +52,11 @@
       {
         "command": "smartdevide.autoDetectRole",
         "title": "SmartDevIDE: Auto-Detect Role",
+        "category": "SmartDevIDE"
+      },
+      {
+        "command": "smartdevide.generateCode",
+        "title": "SmartDevIDE: Generate Code",
         "category": "SmartDevIDE"
       },
       {
@@ -71,6 +85,31 @@
         "category": "SmartDevIDE"
       }
     ],
+    "keybindings": [
+      {
+        "command": "smartdevide.generateCode",
+        "key": "ctrl+shift+g",
+        "mac": "cmd+shift+g",
+        "when": "editorTextFocus"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        { "command": "smartdevide.selectRole" },
+        { "command": "smartdevide.selectModel" },
+        { "command": "smartdevide.generateCode" },
+        { "command": "smartdevide.openDemo" },
+        { "command": "smartdevide.enhancePrompt" },
+        { "command": "smartdevide.showInfo" }
+      ],
+      "editor/context": [
+        {
+          "command": "smartdevide.generateCode",
+          "when": "editorTextFocus",
+          "group": "SmartDevIDE"
+        }
+      ]
+    },
     "configuration": {
       "title": "SmartDevIDE",
       "properties": {

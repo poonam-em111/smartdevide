@@ -3,18 +3,23 @@ import { RoleManager } from './roleManager';
 import { ModelManager } from './models/modelManager';
 import { PromptEnhancer } from './prompt/promptEnhancer';
 import { DemoPanel } from './demoPanel';
+import { generateCode } from './ai/codeGenerator';
 
 let roleManager: RoleManager;
 let modelManager: ModelManager;
 let promptEnhancer: PromptEnhancer;
+let outputChannel: vscode.OutputChannel;
 
 export function activate(context: vscode.ExtensionContext) {
-    console.log('SmartDevIDE extension is now active!');
+    outputChannel = vscode.window.createOutputChannel('SmartDevIDE');
+    try {
+        outputChannel.appendLine('SmartDevIDE activating...');
+        console.log('SmartDevIDE extension is now active!');
 
-    // Initialize core managers
-    roleManager = new RoleManager(context);
-    modelManager = new ModelManager(context);
-    promptEnhancer = new PromptEnhancer(context);
+        // Initialize core managers
+        roleManager = new RoleManager(context);
+        modelManager = new ModelManager(context);
+        promptEnhancer = new PromptEnhancer(context);
 
     // Register role selection command
     const selectRoleCommand = vscode.commands.registerCommand(
@@ -63,18 +68,97 @@ export function activate(context: vscode.ExtensionContext) {
         }
     );
 
-    // Register generate solution command
+    // Register generate code command (AI-powered, inserts into editor)
+    const generateCodeCommand = vscode.commands.registerCommand(
+        'smartdevide.generateCode',
+        async () => {
+            const editor = vscode.window.activeTextEditor;
+            let userPrompt = editor?.document.getText(editor.selection)?.trim() || '';
+
+            if (!userPrompt) {
+                const input = await vscode.window.showInputBox({
+                    prompt: 'Generate code (AI)',
+                    placeHolder: 'e.g., Create a user registration form...',
+                    value: '',
+                    ignoreFocusOut: true
+                });
+                if (!input?.trim()) { return; }
+                userPrompt = input.trim();
+            }
+
+            const role = roleManager.getCurrentRole();
+            const modelId = modelManager.getCurrentModel();
+            const modelDetails = modelManager.getModelById(modelId);
+
+            if (modelDetails?.provider !== 'openai') {
+                vscode.window.showWarningMessage(
+                    'SmartDevIDE Generate Code currently uses OpenAI. Set your model to an OpenAI model (e.g. GPT-4 Turbo) and add your API key in Settings.',
+                    'Open Settings'
+                ).then(choice => {
+                    if (choice === 'Open Settings') {
+                        vscode.commands.executeCommand('workbench.action.openSettings', 'smartdevide.models.openai');
+                    }
+                });
+                return;
+            }
+
+            const useEnhancement = vscode.workspace.getConfiguration('smartdevide').get<boolean>('autoPromptEnhancement', true);
+            let enhancedPrompt: string | undefined;
+            if (useEnhancement) {
+                const enhanced = await promptEnhancer.enhancePrompt(userPrompt, role, modelId);
+                enhancedPrompt = enhanced.enhancedPrompt;
+            }
+
+            let result: { content: string; error?: string };
+            await vscode.window.withProgress(
+                {
+                    location: vscode.ProgressLocation.Notification,
+                    title: `SmartDevIDE: Generating code (${role})...`,
+                    cancellable: false
+                },
+                async () => {
+                    result = await generateCode(userPrompt, role, modelId, enhancedPrompt);
+                }
+            );
+
+            if (result!.error) {
+                vscode.window.showErrorMessage(`SmartDevIDE: ${result!.error}`);
+                return;
+            }
+            if (!result!.content) {
+                vscode.window.showWarningMessage('SmartDevIDE: No content generated.');
+                return;
+            }
+
+            const targetEditor = vscode.window.activeTextEditor;
+            if (targetEditor) {
+                const hasSelection = !targetEditor.selection.isEmpty;
+                await targetEditor.edit(editBuilder => {
+                    if (hasSelection) {
+                        editBuilder.replace(targetEditor.selection, result!.content);
+                    } else {
+                        editBuilder.insert(targetEditor.selection.active, result!.content);
+                    }
+                });
+                vscode.window.showInformationMessage(`SmartDevIDE: Code inserted (${modelDetails?.displayName || modelId}).`);
+            } else {
+                const doc = await vscode.workspace.openTextDocument({ content: result!.content, language: 'plaintext' });
+                await vscode.window.showTextDocument(doc);
+            }
+        }
+    );
+
+    // Register generate solution command (demo panel)
     const generateSolutionCommand = vscode.commands.registerCommand(
         'smartdevide.generateSolution',
         async () => {
             const role = roleManager.getCurrentRole();
             const model = modelManager.getCurrentModel();
-            
+
             vscode.window.showInformationMessage(
                 `Generating solution with ${role} using ${model}`
             );
 
-            // Show demo panel for POC
             DemoPanel.show(
                 context.extensionUri,
                 () => roleManager.getCurrentRole()
@@ -169,6 +253,7 @@ export function activate(context: vscode.ExtensionContext) {
                 '- SmartDevIDE: Select Role',
                 '- SmartDevIDE: Select Model',
                 '- SmartDevIDE: Auto-Detect Role',
+                '- SmartDevIDE: Generate Code',
                 '- SmartDevIDE: Enhance Prompt',
                 '- SmartDevIDE: Open Demo'
             ].join('\\n');
@@ -202,6 +287,7 @@ export function activate(context: vscode.ExtensionContext) {
         selectRoleCommand,
         selectModelCommand,
         autoDetectRoleCommand,
+        generateCodeCommand,
         openDemoCommand,
         generateSolutionCommand,
         enhancePromptCommand,
@@ -229,6 +315,15 @@ export function activate(context: vscode.ExtensionContext) {
             }
         });
         context.globalState.update('smartdevide.hasShownWelcome', true);
+    }
+        outputChannel.appendLine('SmartDevIDE activated successfully.');
+    } catch (err) {
+        const msg = err instanceof Error ? err.message : String(err);
+        const stack = err instanceof Error ? err.stack : '';
+        outputChannel.appendLine(`Activation error: ${msg}`);
+        if (stack) { outputChannel.appendLine(stack); }
+        console.error('SmartDevIDE failed to activate:', err);
+        vscode.window.showErrorMessage(`SmartDevIDE failed to load: ${msg}. Open Output (View > Output) and select "SmartDevIDE" for details.`);
     }
 }
 

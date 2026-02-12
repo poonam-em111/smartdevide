@@ -91,25 +91,45 @@ The extension enhances your AI interactions based on:
 - Project structure
 - Selected code
 
-## 📖 Usage Examples
+## 📋 Commands Reference
 
-### Auto-Detect Role
-```
-Ctrl+Shift+P → SmartDevIDE: Auto-Detect Role
-```
-Automatically suggests role based on current file type.
+All commands are available via the **Command Palette**:
 
-### Enhance Prompt
-```
-Ctrl+Shift+P → SmartDevIDE: Enhance Prompt
-```
-Enter your prompt and see how it's enhanced with context and role-specific instructions.
+- **Windows/Linux:** `Ctrl+Shift+P`
+- **Mac:** `Cmd+Shift+P`
 
-### View Status
-```
-Ctrl+Shift+P → SmartDevIDE: Show Status Info
-```
-See current role, model, and available features.
+Then type **SmartDevIDE** to filter the list.
+
+| Command | Description | Shortcut (Mac) | Shortcut (Win/Linux) |
+|--------|-------------|----------------|----------------------|
+| **SmartDevIDE: Select Role** | Choose your developer role (Backend, Laravel, React, QA, etc.). Shown in the status bar. | — | — |
+| **SmartDevIDE: Select Model** | Choose the AI model (e.g. GPT-4 Turbo, Claude). Shown in the status bar. | — | — |
+| **SmartDevIDE: Generate Code** | Generate code with AI using the current role and model. Inserts or replaces in the editor. | `Cmd+Shift+G` | `Ctrl+Shift+G` |
+| **SmartDevIDE: Auto-Detect Role** | Suggest role based on the current file type. | — | — |
+| **SmartDevIDE: Open Demo** | Open the demo panel with role-based code examples. | — | — |
+| **SmartDevIDE: Generate Solution** | Quick access to the demo panel. | — | — |
+| **SmartDevIDE: Enhance Prompt** | Enter a prompt and see the enhanced version (context + role). | — | — |
+| **SmartDevIDE: Open Settings** | Open SmartDevIDE settings. | — | — |
+| **SmartDevIDE: Show Status Info** | Show current role, model, and commands in a document. | — | — |
+
+### How to run a command
+
+1. Press **Cmd+Shift+P** (Mac) or **Ctrl+Shift+P** (Windows/Linux).
+2. Type **SmartDevIDE** (or the command name, e.g. **Generate Code**).
+3. Select the command and press Enter.
+
+### Generate Code (AI)
+
+- **From Command Palette:** `Cmd+Shift+P` / `Ctrl+Shift+P` → **SmartDevIDE: Generate Code**
+- **Keyboard shortcut:** `Cmd+Shift+G` (Mac) or `Ctrl+Shift+G` (Windows/Linux) when the editor is focused.
+- **Right-click:** In the editor, right-click → **SmartDevIDE** → **SmartDevIDE: Generate Code**
+
+With **Generate Code**, you can type a prompt (e.g. “Create a user registration form”) or select code and use it as the prompt. The extension uses your current role and model and inserts the result into the editor.
+
+### Status bar
+
+- Click the **role** (e.g. 🔧 Backend Developer) to run **Select Role**.
+- Click the **model** (e.g. 🤖 GPT-4 Turbo) to run **Select Model**.
 
 ## ⚙️ Configuration
 

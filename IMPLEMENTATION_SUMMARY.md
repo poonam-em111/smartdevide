@@ -292,7 +292,7 @@ npm run package   # Create VSIX
 
 ### Installation
 ```bash
-code --install-extension smartdevide-2.0.0.vsix
+code --install-extension smartdevide-2.0.1.vsix
 ```
 
 ### Distribution

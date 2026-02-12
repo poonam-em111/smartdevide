@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { Model, ModelProvider, ModelProviderConfig, ExtensionConfig } from '../types';
 import { AVAILABLE_MODELS } from '../config/defaults';
+import { DEFAULT_OPENAI_API_KEY } from '../config/defaultOpenAiKey';
 
 export class ModelManager {
     private static readonly MODEL_KEY = 'smartdevide.selectedModel';
@@ -265,9 +266,9 @@ export class ModelManager {
                 openai: {
                     id: 'openai',
                     name: 'OpenAI',
-                    apiKey: config.get('models.openai.apiKey'),
+                    apiKey: (config.get('models.openai.apiKey') as string)?.trim() || (DEFAULT_OPENAI_API_KEY && (DEFAULT_OPENAI_API_KEY as string).trim()) || undefined,
                     organization: config.get('models.openai.organization'),
-                    enabled: config.get('models.openai.enabled', false),
+                    enabled: config.get('models.openai.enabled', false) || !!(DEFAULT_OPENAI_API_KEY && (DEFAULT_OPENAI_API_KEY as string).trim()),
                     defaultModel: config.get('models.openai.defaultModel', 'gpt-4-turbo')
                 },
                 anthropic: {

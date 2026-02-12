@@ -29,7 +29,7 @@ npm run package
 
 The command creates:
 
-**`smartdevide-2.0.0.vsix`** in the project root (about 82 KB).
+**`smartdevide-2.0.1.vsix`** in the project root (about 82 KB).
 
 ---
 
@@ -48,7 +48,7 @@ cd "/Applications/XAMPP/xamppfiles/htdocs/IDE Extension" && npm install && npm r
 **Option A – Command line**
 
 ```bash
-code --install-extension "/Applications/XAMPP/xamppfiles/htdocs/IDE Extension/smartdevide-2.0.0.vsix"
+code --install-extension "/Applications/XAMPP/xamppfiles/htdocs/IDE Extension/smartdevide-2.0.1.vsix"
 ```
 
 **Option B – From the editor**
@@ -56,7 +56,7 @@ code --install-extension "/Applications/XAMPP/xamppfiles/htdocs/IDE Extension/sm
 1. Open VS Code.
 2. `Ctrl+Shift+P` (or `Cmd+Shift+P` on Mac).
 3. Run: **Extensions: Install from VSIX...**
-4. Choose `smartdevide-2.0.0.vsix`.
+4. Choose `smartdevide-2.0.1.vsix`.
 5. Reload the window if asked.
 
 ### In Cursor
@@ -64,7 +64,7 @@ code --install-extension "/Applications/XAMPP/xamppfiles/htdocs/IDE Extension/sm
 **Option A – Command line**
 
 ```bash
-cursor --install-extension "/Applications/XAMPP/xamppfiles/htdocs/IDE Extension/smartdevide-2.0.0.vsix"
+cursor --install-extension "/Applications/XAMPP/xamppfiles/htdocs/IDE Extension/smartdevide-2.0.1.vsix"
 ```
 
 **Option B – From the editor**
@@ -72,7 +72,7 @@ cursor --install-extension "/Applications/XAMPP/xamppfiles/htdocs/IDE Extension/
 1. Open Cursor.
 2. `Ctrl+Shift+P` (or `Cmd+Shift+P` on Mac).
 3. Run: **Extensions: Install from VSIX...**
-4. Choose `smartdevide-2.0.0.vsix`.
+4. Choose `smartdevide-2.0.1.vsix`.
 5. Reload the window if asked.
 
 ---
@@ -112,7 +112,7 @@ cursor --install-extension "/Applications/XAMPP/xamppfiles/htdocs/IDE Extension/
 
 ```
 IDE Extension/
-├── smartdevide-2.0.0.vsix   ← Install this in VS Code or Cursor
+├── smartdevide-2.0.1.vsix   ← Install this in VS Code or Cursor
 ├── out/                     ← Compiled JavaScript
 │   ├── extension.js
 │   ├── roleManager.js
@@ -128,6 +128,6 @@ IDE Extension/
 ## Summary
 
 - One .vsix for both VS Code and Cursor.
-- Build: `npm run package` → produces `smartdevide-2.0.0.vsix`.
-- Install in VS Code: `code --install-extension path/to/smartdevide-2.0.0.vsix` or use **Install from VSIX** in the UI.
-- Install in Cursor: `cursor --install-extension path/to/smartdevide-2.0.0.vsix` or use **Install from VSIX** in the UI.
+- Build: `npm run package` → produces `smartdevide-2.0.1.vsix`.
+- Install in VS Code: `code --install-extension path/to/smartdevide-2.0.1.vsix` or use **Install from VSIX** in the UI.
+- Install in Cursor: `cursor --install-extension path/to/smartdevide-2.0.1.vsix` or use **Install from VSIX** in the UI.

@@ -1,9 +1,8 @@
-# BehaviourAI Extension - Quick Installation Guide
+# SmartDevIDE – Quick Installation Guide
 
-## ✅ Extension Package Created
+## ✅ Extension Package
 
-**File**: `C:\Projects\aiexstension\smartdevide-1.0.0.vsix`  
-**Size**: 24.62 KB  
+**File**: `smartdevide-2.0.1.vsix`  
 **Status**: Ready to install
 
 ## Installation Steps
@@ -38,14 +37,9 @@ After installation:
    - Click "Select Role" to choose your developer role
    - Or click "Open Demo" to see the interactive demo
 
-2. **Status Bar**: Look for 🎯 in the bottom-right status bar
-   - Click it anytime to change your role
-   - Shows your current role (e.g., "🎯 Backend Developer")
+2. **Status Bar**: Bottom-right shows role (e.g. 🔧 Backend Developer) and model (e.g. 🤖 GPT-4 Turbo). Click either to change.
 
-3. **Open the Demo**: Press `Ctrl+Shift+P` and type:
-   - `SmartDevIDE: Open Demo` - Interactive demo panel
-   - `SmartDevIDE: Select Role` - Change your role
-   - `SmartDevIDE: Generate Solution` - Quick access to demo
+3. **Run any command**: Press `Ctrl+Shift+P` (Windows/Linux) or `Cmd+Shift+P` (Mac), type **SmartDevIDE**, then pick a command (see **Available Commands** below).
 
 ## Testing the Extension
 
@@ -71,18 +65,32 @@ After installation:
 
 ## Available Commands
 
-All commands are accessible via `Ctrl+Shift+P`:
+**How to run:** `Ctrl+Shift+P` (Windows/Linux) or `Cmd+Shift+P` (Mac) → type **SmartDevIDE** → choose a command.
 
-- **SmartDevIDE: Select Role** - Choose developer role
-- **SmartDevIDE: Open Demo** - Interactive code demo
-- **SmartDevIDE: Generate Solution** - Quick demo access
+| Command | What it does |
+|--------|----------------|
+| **SmartDevIDE: Select Role** | Choose developer role (Backend, Laravel, React, QA, etc.) |
+| **SmartDevIDE: Select Model** | Choose AI model (e.g. GPT-4 Turbo) |
+| **SmartDevIDE: Generate Code** | Generate code with AI; inserts into editor. **Shortcut:** `Ctrl+Shift+G` / `Cmd+Shift+G` |
+| **SmartDevIDE: Auto-Detect Role** | Suggest role from current file type |
+| **SmartDevIDE: Open Demo** | Open demo panel with role-based examples |
+| **SmartDevIDE: Generate Solution** | Open demo panel (quick access) |
+| **SmartDevIDE: Enhance Prompt** | See how your prompt is enhanced with context and role |
+| **SmartDevIDE: Open Settings** | Open SmartDevIDE settings |
+| **SmartDevIDE: Show Status Info** | Show current role, model, and commands |
+
+**Generate Code** can also be run by right-clicking in the editor → **SmartDevIDE** → **SmartDevIDE: Generate Code**.
 
 ## Roles Available
 
-- 🔧 **Backend Developer** - Production code, databases, scalability
-- 🎨 **Frontend Developer** - UI components, React, user experience
-- 🧪 **QA Engineer** - Tests, edge cases, security validation
-- 🏗️ **Tech Lead** - Architecture, design decisions, trade-offs
+- 🔧 **Backend Developer** - APIs, databases, scalability
+- 🎸 **Laravel Developer** - Laravel, Eloquent, Blade
+- 🐘 **Core PHP Developer** - Pure PHP, performance
+- ⚛️ **React Developer** - React, hooks, TypeScript
+- 🎨 **Frontend Developer** - UI/UX, styling
+- 🧪 **QA Engineer** - Tests, edge cases, security
+- 🏗️ **Tech Lead** - Architecture, design decisions
+- 📋 **Project Manager** - Planning, documentation
 
 ## Demo Commands
 

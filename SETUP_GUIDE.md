@@ -43,21 +43,35 @@ npm run watch
 npm run package
 ```
 
-This creates `smartdevide-2.0.0.vsix`
+This creates `smartdevide-2.0.1.vsix`
 
 ## 🔧 Production Installation
 
 ### Install from VSIX
 
 ```bash
-code --install-extension smartdevide-2.0.0.vsix
+code --install-extension smartdevide-2.0.1.vsix
 ```
 
 ### Verify Installation
 
-1. Open VS Code
-2. Press `Ctrl+Shift+P`
-3. Type "SmartDevIDE" - you should see all commands
+1. Open VS Code or Cursor
+2. Press `Ctrl+Shift+P` (Windows/Linux) or `Cmd+Shift+P` (Mac)
+3. Type **SmartDevIDE** – you should see all commands listed
+
+### Commands summary
+
+| Command | Description |
+|--------|-------------|
+| **SmartDevIDE: Select Role** | Choose developer role |
+| **SmartDevIDE: Select Model** | Choose AI model |
+| **SmartDevIDE: Generate Code** | Generate code with AI (`Cmd+Shift+G` / `Ctrl+Shift+G`) |
+| **SmartDevIDE: Auto-Detect Role** | Detect role from file type |
+| **SmartDevIDE: Open Demo** | Open demo panel |
+| **SmartDevIDE: Generate Solution** | Open demo panel |
+| **SmartDevIDE: Enhance Prompt** | Preview enhanced prompt |
+| **SmartDevIDE: Open Settings** | Open extension settings |
+| **SmartDevIDE: Show Status Info** | View current role and model |
 
 ## ⚙️ Configuration
 
@@ -384,7 +398,7 @@ The extension will notify you of updates automatically.
 ### Manual Update
 
 ```bash
-code --install-extension smartdevide-2.0.0.vsix
+code --install-extension smartdevide-2.0.1.vsix
 ```
 
 ### Reset to Defaults
@@ -435,7 +449,7 @@ Use extension in automated workflows:
 ```yaml
 # .github/workflows/ai-review.yml
 - name: Install Extension
-  run: code --install-extension smartdevide-2.0.0.vsix
+  run: code --install-extension smartdevide-2.0.1.vsix
   
 - name: Generate Code Review
   run: |
